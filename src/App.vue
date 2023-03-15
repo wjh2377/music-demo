@@ -1,16 +1,12 @@
 <template>
-  <div>
-    <!-- 一级路由-显示地方 -->
+  <div class="app">
+    <!-- 一级路由 挂载点-->
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-export default {
-
-}
+export default {};
 </script>
 
-<style>
-
-</style>
+<style></style>

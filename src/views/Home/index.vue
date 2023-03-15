@@ -1,13 +1,69 @@
 <template>
   <div>
-    我是home
+    <p class="title">推荐歌单</p>
+    <van-row gutter="6">
+      <van-col span="8" v-for="obj in musicList" :key="obj.id">
+        <van-image width="100%" height="3rem" fit="cover" :src="obj.picUrl" />
+        <p class="song_name">{{ obj.name }}</p>
+      </van-col>
+    </van-row>
+    <p class="title">最新音乐</p>
+    <!-- 单元格组件封装到songitem中
+      <van-cell
+      center
+      v-for="obj in music"
+      :key="obj.id"
+      :title="obj.name"
+      :label="obj.song.artists[0].name + ' - ' + obj.name"
+    >
+      <template #right-icon>
+        <van-icon size="0.6rem" name="play-circle-o" />
+      </template>
+    </van-cell> -->
+    <SongItem
+      v-for="obj in music"
+      :key="obj.id"
+      :name="obj.name"
+      :artists="obj.song.artists[0].name"
+      :id="obj.id"
+    ></SongItem>
   </div>
 </template>
 
 <script>
-export default {
+import { recommendMusicAPI, recommendsMusicAPI } from "@/api";
+import SongItem from "@/components/SongItem";
 
-}
+export default {
+  data() {
+    return {
+      musicList: [],
+      music: [],
+    };
+  },
+  created() {
+    this.getMusicList();
+    this.getMusic();
+  },
+  methods: {
+    async getMusicList() {
+      const res = await recommendMusicAPI({ limit: 6 });
+      if (res?.code === 200) {
+        this.musicList = res.result;
+      }
+    },
+    async getMusic() {
+      const res = await recommendsMusicAPI({ limit: 20 });
+      if (res?.code === 200) {
+        this.music = res.result;
+      }
+      console.log(res);
+    },
+  },
+  components: {
+    SongItem,
+  },
+};
 </script>
 
 <style scoped>
